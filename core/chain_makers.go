@@ -27,6 +27,7 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/vm"
 	"github.com/ethereum/go-ethereum/ethdb"
+	"github.com/ethereum/go-ethereum/log"
 	"github.com/ethereum/go-ethereum/params"
 )
 
@@ -166,6 +167,7 @@ func GenerateChain(config *params.ChainConfig, parent *types.Block, engine conse
 	genblock := func(i int, parent *types.Block, statedb *state.StateDB) (*types.Block, types.Receipts) {
 		// TODO(karalabe): This is needed for clique, which depends on multiple blocks.
 		// It's nonetheless ugly to spin up a blockchain here. Get rid of this somehow.
+		log.Info("chain_makers.go GenerateChain")
 		blockchain, _ := NewBlockChain(db, config, engine, vm.Config{})
 		defer blockchain.Stop()
 
@@ -246,6 +248,7 @@ func newCanonical(engine consensus.Engine, n int, full bool) (ethdb.Database, *B
 	db, _ := ethdb.NewMemDatabase()
 	genesis := gspec.MustCommit(db)
 
+	log.Info("chain_makers.go newCanonical")
 	blockchain, _ := NewBlockChain(db, params.AllEthashProtocolChanges, engine, vm.Config{})
 	// Create and inject the requested chain
 	if n == 0 {

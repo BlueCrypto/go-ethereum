@@ -27,6 +27,7 @@ import (
 	"sync/atomic"
 	"time"
 
+	// "github.com/bluecrypto/go-ethereum/blue"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/mclock"
 	"github.com/ethereum/go-ethereum/consensus"
@@ -676,6 +677,8 @@ func SetReceiptsData(config *params.ChainConfig, block *types.Block, receipts ty
 	}
 }
 
+// var bluemd blue.BlueMetadata
+
 // InsertReceiptChain attempts to complete an already existing header chain with
 // transaction and receipt data.
 func (bc *BlockChain) InsertReceiptChain(blockChain types.Blocks, receiptChain []types.Receipts) (int, error) {
@@ -719,6 +722,8 @@ func (bc *BlockChain) InsertReceiptChain(blockChain types.Blocks, receiptChain [
 		if err := WriteBody(batch, block.Hash(), block.NumberU64(), block.Body()); err != nil {
 			return i, fmt.Errorf("failed to write block body: %v", err)
 		}
+
+		// bluemd.ProcessBlockReceipts(receipts)
 		if err := WriteBlockReceipts(batch, block.Hash(), block.NumberU64(), receipts); err != nil {
 			return i, fmt.Errorf("failed to write block receipts: %v", err)
 		}
@@ -762,6 +767,7 @@ func (bc *BlockChain) InsertReceiptChain(blockChain types.Blocks, receiptChain [
 		"number", head.Number(),
 		"hash", head.Hash(),
 		"ignored", stats.ignored)
+
 	return 0, nil
 }
 
